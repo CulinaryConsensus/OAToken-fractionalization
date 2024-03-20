@@ -1,0 +1,30 @@
+{
+  "name": "oatoken",
+  "version": "1.0.0",
+  "description": "The OAToken ERC404",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.6",
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/hardhat-upgrades": "^3.0.3",
+    "hardhat-gas-reporter": "^1.0.8",
+    "solidity-coverage": "^0.8.1",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.1.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1",
+    "@openzeppelin/contracts-upgradeable": "^5.0.1",
+    "csv-writer": "^1.6.0",
+    "ethers": "^6.11.1",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  }
+}
