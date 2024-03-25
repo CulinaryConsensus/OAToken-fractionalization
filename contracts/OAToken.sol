@@ -1,18 +1,24 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/blob/v5.0.0/ownership/Ownable.sol";
 
 interface OAStorage {
     function isNFTPresent(uint16 nftId) external view returns (bool);
 }
 
-contract OAToken is ERC20, ERC20Burnable {
+interface OARewardsDistributor {
+    function claimRewards(address token) external;
+}
+
+contract OAToken is ERC20, ERC20Burnable, Ownable {
     // @dev The NFT collection contract
     ERC721Enumerable public nftCollection;
+
+    OARewardsDistributor public rewardsDistributor;
 
     // @dev Storage contract instances
     OAStorage public elders;
@@ -29,15 +35,21 @@ contract OAToken is ERC20, ERC20Burnable {
     event NFTWithdrawn(address indexed nftContract, uint256 indexed tokenId, address indexed withdrawer, uint256 tokenAmount);
 
     constructor(
+        address initialOwner,
         address nftCollectionAddress,
+        address rewardsDistributorAddress,
         address eldersAddress,
         address residentsAddress,
         address explorersAddress_1,
         address explorersAddress_2,
         address dreamersAddress_1,
         address dreamersAddress_2
-    ) ERC20("Orbital Apes Token", "OAT") {
+    ) Ownable(initialOwner) ERC20("Orbital Apes Token", "OAT") {
+
         nftCollection = ERC721Enumerable(nftCollectionAddress);
+        rewardsDistributor = OARewardsDistributor(rewardsDistributorAddress);
+
+        // storage contracts
         elders = OAStorage(eldersAddress);
         residents = OAStorage(residentsAddress);
         explorers_1 = OAStorage(explorersAddress_1);
