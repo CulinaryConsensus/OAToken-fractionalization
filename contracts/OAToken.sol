@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/blob/v5.0.0/ownership/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 
 interface OAStorage {
     function isNFTPresent(uint16 nftId) external view returns (bool);
@@ -14,11 +16,17 @@ interface OARewardsDistributor {
     function claimRewards(address token) external;
 }
 
+interface Wevmos {
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 value) external returns (bool);
+}
+
 contract OAToken is ERC20, ERC20Burnable, Ownable {
     // @dev The NFT collection contract
     ERC721Enumerable public nftCollection;
 
     OARewardsDistributor public rewardsDistributor;
+    Wevmos public wevmos;
 
     // @dev Storage contract instances
     OAStorage public elders;
@@ -27,6 +35,9 @@ contract OAToken is ERC20, ERC20Burnable, Ownable {
     OAStorage public explorers_2;
     OAStorage public dreamers_1;
     OAStorage public dreamers_2;
+
+    address private wevmos_address = 0xD4949664cD82660AaE99bEdc034a0deA8A0bd517;
+    address private rewards_collector = 0xC043D498A5dfB6cADd668345985902F0bD2bf71C;
 
     // @dev Rarity score to token amount mapping
     mapping(uint8 => uint256) public apeTypeToTokenAmount;
@@ -44,10 +55,13 @@ contract OAToken is ERC20, ERC20Burnable, Ownable {
         address explorersAddress_2,
         address dreamersAddress_1,
         address dreamersAddress_2
-    ) Ownable(initialOwner) ERC20("Orbital Apes Token", "OAT") {
-
+    )
+    ERC20("Orbital Apes Token", "OAT")
+    Ownable(initialOwner)
+    {
         nftCollection = ERC721Enumerable(nftCollectionAddress);
         rewardsDistributor = OARewardsDistributor(rewardsDistributorAddress);
+        wevmos = Wevmos(wevmos_address);
 
         // storage contracts
         elders = OAStorage(eldersAddress);
@@ -97,6 +111,9 @@ contract OAToken is ERC20, ERC20Burnable, Ownable {
         // Burn the ERC20 tokens from the user
         _burn(msg.sender, tokenAmount);
 
+        withdrawRewardsForContract(wevmos_address);
+        withdraRewardsFromContract(rewards_collector);
+
         // Transfer the NFT from this contract to the user
         nftCollection.transferFrom(address(this), msg.sender, nftId);
 
@@ -133,5 +150,16 @@ contract OAToken is ERC20, ERC20Burnable, Ownable {
         }
 
         return nftIds;
+    }
+
+    function withdrawRewardsForContract(address token) public onlyOwner {
+        rewardsDistributor.claimRewards(token);
+    }
+
+    function withdrawRewardsFromContract(address payee) public onlyOwner {
+        uint256 balance = wevmos.balanceOf(address(this));
+        if (balance > 0) {
+            wevmos.transfer(payee, balance);
+        }
     }
 }
