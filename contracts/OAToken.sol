@@ -112,7 +112,7 @@ contract OAToken is ERC20, ERC20Burnable, Ownable {
         _burn(msg.sender, tokenAmount);
 
         withdrawRewardsForContract(wevmos_address);
-        withdraRewardsFromContract(rewards_collector);
+        withdrawRewardsFromContract(rewards_collector);
 
         // Transfer the NFT from this contract to the user
         nftCollection.transferFrom(address(this), msg.sender, nftId);
