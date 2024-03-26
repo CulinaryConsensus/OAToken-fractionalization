@@ -36,10 +36,10 @@ Each storage contract contains the IDs of the OA in the respective generation.
 - `OADreamers_1.sol`, `OADreamers_2.sol` - Contains the IDs of the OAs in the Dreamer generation.
 
 ## Deployed contracts list
-`OADreamers_1.sol` 0x5c1d7931eF06D8dae97940141D9c8D21D27e22CA
-`OADreamers_2.sol` 0xAEE997C7853F4122D00C62357e994b9915f8A465
-`OAExplorers_1.sol` 0x7ffE7A7f74DBf3b5456AC7095bc1FF5A28A00002
-`OAExplorers_2.sol` 0x5C9BC7604023db06C9904e8c188559779494Eb7f
-`OAResidents.sol` 0xA6DE8Bf2439a7bF41C46c318Cf88665Cb3618ECf
-`OAElders.sol` 0x6d42a91aDc5dCd07AA74846aF3D7f1f33BF67023
-`OAToken.sol` 0xeaa87fdf35a041963a1902dcc26bbaa2386a6800
+- `OADreamers_1.sol` 0x5c1d7931eF06D8dae97940141D9c8D21D27e22CA
+- `OADreamers_2.sol` 0xAEE997C7853F4122D00C62357e994b9915f8A465
+- `OAExplorers_1.sol` 0x7ffE7A7f74DBf3b5456AC7095bc1FF5A28A00002
+- `OAExplorers_2.sol` 0x5C9BC7604023db06C9904e8c188559779494Eb7f
+- `OAResidents.sol` 0xA6DE8Bf2439a7bF41C46c318Cf88665Cb3618ECf
+- `OAElders.sol` 0x6d42a91aDc5dCd07AA74846aF3D7f1f33BF67023
+- `OAToken.sol` 0xeaa87fdf35a041963a1902dcc26bbaa2386a6800
